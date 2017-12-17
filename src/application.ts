@@ -18,12 +18,12 @@ class Application {
         });
     }
 
-    configureRoutes() {
-        this.app.get("/getuser", this.getUser.bind(this));
-        this.app.delete("/freeuser", this.freeUser.bind(this));
+    private configureRoutes(): void {
+        this.app.get("/getuser", this.getUserController.bind(this));
+        this.app.delete("/freeuser", this.freeUserController.bind(this));
     }
 
-    private getUser(request: Express.Request, response: Express.Response) {
+    private getUserController(request: Express.Request, response: Express.Response): void {
         this.usersService.getUser()
             .then((user: User) => {
                 response.status(200).send(JSON.stringify(user));
@@ -33,7 +33,7 @@ class Application {
             });
     }
 
-    private freeUser(request: Express.Request, response: Express.Response) {
+    private freeUserController(request: Express.Request, response: Express.Response): void {
         let userId: number = +request.body.id;
         this.usersService.freeUser(userId)
             .then(() => {

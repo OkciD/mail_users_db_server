@@ -1,5 +1,6 @@
 import * as PgPromise from "pg-promise";
 import User from "./user";
+import EngagedUsers from "./engaged-users";
 
 export default class UserService {
     private pgPromise: PgPromise.IMain;
@@ -7,7 +8,7 @@ export default class UserService {
     private readonly databaseName: string = "mail_users_db";
     private readonly username: string = "mail_users_db_user";
     private readonly password: string = "mail.ru";
-    private engagedUsersIds: number[];
+    private engagedUsers: EngagedUsers;
 
     constructor() {
         const initOptions = {
@@ -17,29 +18,26 @@ export default class UserService {
         };
         this.pgPromise = PgPromise(initOptions);
         this.database = this.pgPromise(`postgres://${this.username}:${this.password}@localhost:5432/${this.databaseName}`);
-        this.engagedUsersIds = [];
+        this.engagedUsers = new EngagedUsers();
     }
 
-    getUser(): Promise<User> {
-        let whereStatement: string = (this.engagedUsersIds.length != 0) ?
-            `WHERE "user".id NOT IN (${this.engagedUsersIds.join()})` :
-            "";
+    public getUser(): Promise<User> {
+        let whereStatement: string = (this.engagedUsers.isEmpty()) ? "" :
+            `WHERE "user".id NOT IN (${this.engagedUsers.getIdsString()})`;
 
         return this.database.oneOrNone(`SELECT * FROM "user" ${whereStatement} ORDER BY random() LIMIT 1;`)
             .then((user: User) => {
                 if (!user) {
                     throw "All users are in use"
                 }
-                this.engagedUsersIds.push(user.id);
+                this.engagedUsers.addUser(user.id);
                 return user;
             });
     }
 
-    freeUser(userId: number): Promise<void> {
+    public freeUser(userId: number): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            let index: number = this.engagedUsersIds.indexOf(userId);
-            if (index > -1) {
-                this.engagedUsersIds.splice(index, 1);
+            if (this.engagedUsers.freeUser(userId)) {
                 resolve();
             } else {
                 reject();
