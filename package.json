@@ -1,5 +1,5 @@
 {
-  "name": "users_db_server",
+  "name": "mail_users_db_server",
   "version": "0.0.1",
   "scripts": {
     "start": "npm run migrate && ts-node src/application.ts",
