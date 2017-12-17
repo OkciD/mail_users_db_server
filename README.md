@@ -9,6 +9,7 @@ A server that stores users info in database and provides it for testing [mail.ru
 | --- | --- | --- | --- |
 | /getuser | GET |  | {  "id": *number*,  "email": *string*,  "password": *string*  } |
 | /freeuser | DELETE | { "id": *number* } |  |
+| /freeall | DELETE |  |  |
 
 ## Run server
 Since this application is dockerized, you need to execute the scripts below:

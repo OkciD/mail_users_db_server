@@ -44,4 +44,8 @@ export default class UserService {
             }
         });
     }
+
+    public freAll(): void {
+        this.engagedUsers.freeAll();
+    }
 }

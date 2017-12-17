@@ -21,6 +21,7 @@ class Application {
     private configureRoutes(): void {
         this.app.get("/getuser", this.getUserController.bind(this));
         this.app.delete("/freeuser", this.freeUserController.bind(this));
+        this.app.delete("/freeall", this.freeAllController.bind(this));
     }
 
     private getUserController(request: Express.Request, response: Express.Response): void {
@@ -42,6 +43,11 @@ class Application {
             .catch(() => {
                 response.status(404).send();
             })
+    }
+
+    private freeAllController(request: Express.Request, response: Express.Response): void {
+        this.usersService.freAll();
+        response.status(404).send();
     }
 }
 

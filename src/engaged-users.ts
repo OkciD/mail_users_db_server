@@ -59,4 +59,8 @@ export default class EngagedUsers {
             return engagedUser.userId;
         }).join();
     }
+
+    public freeAll(): void {
+        this.engagedUsers = [];
+    }
 }
