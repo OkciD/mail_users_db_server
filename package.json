@@ -2,12 +2,15 @@
   "name": "users_db_server",
   "version": "0.0.1",
   "scripts": {
-    "start": "ts-node src/application.ts"
+    "start": "npm run migrate && ts-node src/application.ts",
+    "migrate": "node ./migrate migrate"
   },
   "dependencies": {
     "typescript": "^2.6.2",
     "express": "^4.16.2",
     "@types/node": "^8.5.1",
-    "ts-node": "^4.0.2"
+    "ts-node": "^4.0.2",
+    "pg-promise": "^7.3.2",
+    "sql-migrations": "^1.0.1"
   }
 }
