@@ -11,6 +11,9 @@
     "@types/node": "^8.5.1",
     "ts-node": "^4.0.2",
     "pg-promise": "^7.3.2",
-    "sql-migrations": "^1.0.1"
+    "sql-migrations": "^1.0.1",
+    "@types/express": "^4.0.39",
+    "body-parser": "^1.18.2",
+    "@types/body-parser": "^1.16.8"
   }
 }

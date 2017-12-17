@@ -34,4 +34,16 @@ export default class UserService {
                 return user;
             });
     }
+
+    freeUser(userId: number): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            let index: number = this.engagedUsersIds.indexOf(userId);
+            if (index > -1) {
+                this.engagedUsersIds.splice(index, 1);
+                resolve();
+            } else {
+                reject();
+            }
+        });
+    }
 }
