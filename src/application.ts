@@ -1,5 +1,6 @@
 import * as Express from "express";
 import UserService from "./user-service";
+import User from "./user";
 
 class Application {
     private app: Express.Application;
@@ -16,8 +17,17 @@ class Application {
     }
 
     configureRoutes() {
-        this.app.get("/", (request: Express.Request, response: Express.Response) => {
-            response.send("Hello world");
+        this.app.get("/getuser", this.getUser.bind(this));
+    }
+
+    private getUser(request: Express.Request, response: Express.Response) {
+        let getUserPromise: Promise<User | null> = this.usersService.getUser();
+
+        getUserPromise.then((user: User) => {
+            response.status(200).send(JSON.stringify(user));
+        });
+        getUserPromise.catch((error: string) => {
+            response.status(404).send(JSON.stringify({error}));
         });
     }
 }
