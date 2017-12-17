@@ -7,9 +7,9 @@ A server that stores users info in database and provides it for testing [mail.ru
 
 | URL | Request method | Request body | Response body |
 | --- | --- | --- | --- |
-| /getuser | GET |  | {  "id": *number*,  "email": *string*,  "password": *string*  } |
-| /freeuser | DELETE | { "id": *number* } |  |
-| /freeall | DELETE |  |  |
+| /getuser | GET |  | {  "id": *number*, "email": *string*, "password": *string*  } |
+| /freeuser | DELETE | { "id": *number* } | { "message": *string* } or { "error": *string* } |
+| /freeall | DELETE |  | { "message": *string* } |
 
 ## Run server
 Since this application is dockerized, you need to execute the scripts below:

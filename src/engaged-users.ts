@@ -39,15 +39,18 @@ export default class EngagedUsers {
         this.engagedUsers.push(new EngagedUser(userId));
     }
 
-    public freeUser(userId: number): boolean {
-        let index: number = this.engagedUsers.findIndex((currentUser: EngagedUser) => {
-            return currentUser.userId === userId;
+    public freeUser(userId: number): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            let index: number = this.engagedUsers.findIndex((currentUser: EngagedUser) => {
+                return currentUser.userId === userId;
+            });
+            if (index > -1) {
+                this.engagedUsers.splice(index, 1);
+                resolve();
+            } else {
+                reject();
+            }
         });
-        if (index > -1) {
-            this.engagedUsers.splice(index, 1);
-            return true;
-        }
-        return false;
     }
 
     public isEmpty(): boolean {
@@ -60,7 +63,8 @@ export default class EngagedUsers {
         }).join();
     }
 
-    public freeAll(): void {
+    public freeAll(): Promise<void> {
         this.engagedUsers = [];
+        return Promise.resolve();
     }
 }

@@ -1,6 +1,7 @@
 import * as PgPromise from "pg-promise";
-import User from "./user";
+import User from "./utils/user";
 import EngagedUsers from "./engaged-users";
+import {ErrorMessage, InfoMessage} from "./utils/messages";
 
 export default class UserService {
     private pgPromise: PgPromise.IMain;
@@ -28,24 +29,26 @@ export default class UserService {
         return this.database.oneOrNone(`SELECT * FROM "user" ${whereStatement} ORDER BY random() LIMIT 1;`)
             .then((user: User) => {
                 if (!user) {
-                    throw "All users are in use"
+                    throw new ErrorMessage("All users are in use");
                 }
                 this.engagedUsers.addUser(user.id);
                 return user;
             });
     }
 
-    public freeUser(userId: number): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (this.engagedUsers.freeUser(userId)) {
-                resolve();
-            } else {
-                reject();
-            }
-        });
+    public freeUser(userId: number): Promise<InfoMessage | ErrorMessage> {
+        return this.engagedUsers.freeUser(userId)
+            .then(() => {
+                return new InfoMessage(`User #${userId} disengaged`);
+            })
+            .catch(() => {
+                throw new ErrorMessage("User doesn't exist or isn't engaged");
+            })
     }
 
-    public freAll(): void {
-        this.engagedUsers.freeAll();
+    public freeAll(): Promise<InfoMessage> {
+        return this.engagedUsers.freeAll().then(() => {
+            return new InfoMessage("All users are free, Daenerys");
+        })
     }
 }

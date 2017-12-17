@@ -1,7 +1,8 @@
 import * as Express from "express";
 import UserService from "./user-service";
-import User from "./user";
+import User from "./utils/user";
 import * as BodyParser from "body-parser";
+import {ErrorMessage, InfoMessage} from "./utils/messages";
 
 class Application {
     private app: Express.Application;
@@ -29,25 +30,26 @@ class Application {
             .then((user: User) => {
                 response.status(200).send(JSON.stringify(user));
             })
-            .catch((error: string) => {
-                response.status(404).send(JSON.stringify({error}));
+            .catch((errorMessage: ErrorMessage) => {
+                response.status(404).send(JSON.stringify(errorMessage));
             });
     }
 
     private freeUserController(request: Express.Request, response: Express.Response): void {
         let userId: number = +request.body.id;
         this.usersService.freeUser(userId)
-            .then(() => {
-                response.status(200).send();
+            .then((infoMessage: InfoMessage) => {
+                response.status(200).send(JSON.stringify(infoMessage));
             })
-            .catch(() => {
-                response.status(404).send();
+            .catch((errorMessage: ErrorMessage) => {
+                response.status(404).send(JSON.stringify(errorMessage));
             })
     }
 
     private freeAllController(request: Express.Request, response: Express.Response): void {
-        this.usersService.freAll();
-        response.status(404).send();
+        this.usersService.freeAll().then((infoMessage: InfoMessage) => {
+            response.status(200).send(JSON.stringify(infoMessage));
+        })
     }
 }
 
