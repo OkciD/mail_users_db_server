@@ -1,17 +1,9 @@
 class InfoMessage {
-    public message: string;
-
-    constructor(message: string) {
-        this.message = message;
-    }
+    constructor(private message: string) { }
 }
 
 class ErrorMessage {
-    private error: string;
-
-    constructor(message: string) {
-        this.error = message;
-    }
+    constructor(private error: string) {  }
 }
 
 export {InfoMessage, ErrorMessage};
