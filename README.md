@@ -1,7 +1,7 @@
 # mail_users_db_server
 
 ## Description
-A server that stores users info in database and provides it for testing [mail.ru]("https://mail.ru/") interface.
+A server that stores users info in database and provides it for testing [mail.ru](https://mail.ru/) interface.
 
 ## API
 
